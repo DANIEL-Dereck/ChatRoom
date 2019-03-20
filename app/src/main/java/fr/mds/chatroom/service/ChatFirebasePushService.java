@@ -1,11 +1,16 @@
 package fr.mds.chatroom.service;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import fr.mds.chatroom.activity.MainActivity;
+import fr.mds.chatroom.application.App;
 
 import static java.nio.file.Paths.get;
 
@@ -22,6 +27,10 @@ public class ChatFirebasePushService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         Log.d(TAG, "onNewToken" + s);
+        SharedPreferences.Editor editor = App.getContext().getSharedPreferences(MainActivity.PREF, Context.MODE_PRIVATE).edit();
+        editor.putString(MainActivity.TOKEN, s).apply();
+        editor.commit();
+
     }
 
     @Override

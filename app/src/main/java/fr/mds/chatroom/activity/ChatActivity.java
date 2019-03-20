@@ -37,6 +37,7 @@ import okhttp3.Response;
 public class ChatActivity extends AppCompatActivity {
     public static final String TAG = "ChatActivity";
     public static final int ACTIVITY_CODE = 0x02;
+    public static final String MESSAGES_STATE = "MESSAGES_STATE";
 
     private ListView lv_chat_messages;
     private EditText et_chat_message;
@@ -64,12 +65,33 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(MESSAGES_STATE, this.messages);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState.getSerializable(MESSAGES_STATE) instanceof ArrayList) {
+            this.messages.clear();
+            this.messages.addAll((ArrayList<Message>) savedInstanceState.getSerializable(MESSAGES_STATE));
+        }
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         this.initComponent();
 
-        messages = new ArrayList<>();
+        if (savedInstanceState != null) {
+            onRestoreInstanceState(savedInstanceState);
+        } else {
+            messages = new ArrayList<>();
+        }
+
         adapter = new MessageAdapter(this, messages);
         lv_chat_messages.setAdapter(adapter);
 
@@ -108,7 +130,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     Message sendMessage = new Message(login, message);
                     ChatActivity.this.et_chat_message.setText("");
-                    ChatActivity.this.messages.add(sendMessage);
+//                    ChatActivity.this.messages.add(sendMessage);
                     ChatActivity.this.adapter.notifyDataSetChanged();
 
 
@@ -132,9 +154,13 @@ public class ChatActivity extends AppCompatActivity {
 //
 //                            jobject.accumulate("data", )
 
+                            SharedPreferences sharedPreferences = App.getContext().getSharedPreferences(MainActivity.PREF, Context.MODE_PRIVATE);
+                            String token = "key= " + sharedPreferences.getString(MainActivity.TOKEN, "");
+                            token = "key= AAAAwDk-sl0:APA91bFgaYBIm1E9cK7snWPiIGiiLxgbWYnqA-PDOOHJBRZg5Pog0QDmzer3-9YTN9OzLh1K7xHkI7QzNYKEKzpeb1a_gCvrLXqVAapP1QTci8yIb4u_jUdap-6bmXbwGdmgb7sXvn6U";
+
                             Request request = new Request.Builder()
                                     .url("https://fcm.googleapis.com/fcm/send")
-                                    .addHeader("Authorization", "key= AAAAwDk-sl0:APA91bFgaYBIm1E9cK7snWPiIGiiLxgbWYnqA-PDOOHJBRZg5Pog0QDmzer3-9YTN9OzLh1K7xHkI7QzNYKEKzpeb1a_gCvrLXqVAapP1QTci8yIb4u_jUdap-6bmXbwGdmgb7sXvn6U")
+                                    .addHeader("Authorization", token)
                                     .post(requestBody)
                                     .build();
 

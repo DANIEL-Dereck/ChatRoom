@@ -1,6 +1,8 @@
 package fr.mds.chatroom.entity;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
     private String login;
     private String message;
 

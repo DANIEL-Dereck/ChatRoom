@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     public static final int ACTIVITY_CODE = 0x01;
     public static final String EXTRA_LOGIN = "EXTRA_LOGIN";
+    public static final String TOKEN = "TOKEN";
     public static final String PREF = "CHAT_ROOM";
     public static final String TOPIC = "chat";
 
