@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ChatRoom</string>
+    <string name="login">Login</string>
+    <string name="go">GO !</string>
+    <string name="send">send</string>
+    <string name="msg_subscribed">subscribed</string>
+    <string name="msg_subscribe_failed">Fail to subscribe</string>
+</resources>
